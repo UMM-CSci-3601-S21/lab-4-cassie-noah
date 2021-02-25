@@ -1,7 +1,7 @@
 > **Make sure you update the links for the badges below so they point
 > to _your_ project and not the "starter" copy. You also need to make
 > sure that analysis checks are being run on all pull requests.** See
-> [`CODE-QUALITY-CHECKS.md`]()
+> [`CODE-QUALITY-CHECKS.md`](CODE_QUALITY_CHECKS.md)
 > for info on how to do that.
 >
 > Feel free to remove the badge above and this text when you've

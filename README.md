@@ -3,7 +3,7 @@
 > **Make sure you update the links for the badges below so they point
 > to _your_ project and not the "starter" copy. You also need to make
 > sure that analysis checks are being run on all pull requests.** See
-> [`CODE-QUALITY-CHECKS.md`](CODE-QUALITY-CHECKS.md)
+> [`CODE-QUALITY-CHECKS.md`]()
 > for info on how to do that.
 >
 > Feel free to remove the badge above and this text when you've
@@ -15,8 +15,8 @@
 [![Client Build Status](../../actions/workflows/client.yaml/badge.svg)](../../actions/workflows/client.yaml)
 [![End to End Build Status](../../actions/workflows/e2e.yaml/badge.svg)](../../actions/workflows/e2e.yaml)
 
-[![BCH compliance](https://bettercodehub.com/edge/badge/UMM-CSci-3601/3601-lab4-mongo?branch=main)](https://bettercodehub.com/)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/UMM-CSci-3601/3601-lab4-mongo.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/UMM-CSci-3601/3601-lab4-mongo/alerts/)
+[![BCH compliance](https://bettercodehub.com/edge/badge/UMM-CSci-3601-S21/lab-4-cassie-noah-jonah)](https://bettercodehub.com/)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/UMM-CSci-3601-S21/lab-4-cassie-noah-jonah.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/UMM-CSci-3601-S21/lab-4-cassie-noah-jonah/alerts/)
 
 - [Setup](#setup)
   - [Make sure you have Mongo running on your computer](#make-sure-you-have-mongo-running-on-your-computer)

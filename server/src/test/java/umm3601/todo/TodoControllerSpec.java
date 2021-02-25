@@ -37,7 +37,37 @@ import io.javalin.http.NotFoundResponse;
 import io.javalin.http.util.ContextUtil;
 import io.javalin.plugin.json.JavalinJson;
 
+/**
+* Tests the logic of the TodoController
+*
+* @throws IOException
+*/
 
 public class TodoControllerSpec {
+
+  MockHttpServletRequest mockReq = new MockHttpServletRequest();
+  MockHttpServletResponse mockRes = new MockHttpServletResponse();
+
+  private TodoController todoController;
+
+  static MongoClient mongoClient;
+  static MongoDatabase db;
+
+  static ObjectMapper jsonMapper = new ObjectMapper();
+
+  @BeforeAll
+  public static void setupAll(){
+    String mongoAddr = System.getenv().getOrDefault("MONGO_ADDR", "localhost");
+
+    mongoClient = MongoClients.create(
+    MongoClientSettings.builder()
+    .applyToClusterSettings(builder ->
+    builder.hosts(Arrays.asList(new ServerAddress(mongoAddr))))
+    .build());
+
+    db = mongoClient.getDatabase("test");
+  }
+
+  
 
 }

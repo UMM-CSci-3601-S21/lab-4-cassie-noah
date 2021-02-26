@@ -50,6 +50,8 @@ public class TodoControllerSpec {
 
   private TodoController todoController;
 
+  private ObjectId testId;
+
   static MongoClient mongoClient;
   static MongoDatabase db;
 
@@ -67,6 +69,53 @@ public class TodoControllerSpec {
 
     db = mongoClient.getDatabase("test");
   }
+
+  @BeforeEach
+  public void setupEach() throws IOException {
+
+    // Reset our mock request and response objects
+    mockReq.resetAll();
+    mockRes.resetAll();
+
+    // Setup database
+    MongoCollection<Document> todoDocuments = db.getCollection("todos");
+    todoDocuments.drop();
+    List<Document> testTodos = new ArrayList<>();
+    testTodos.add(
+      new Document()
+      .append("owner", "Fry")
+      .append("category", "homework")
+      .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
+      .append("status", false));
+    testTodos.add(
+      new Document()
+      .append("owner", "Fry")
+      .append("category", "homework")
+      .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
+      .append("status", false));
+    testTodos.add(
+      new Document()
+      .append("owner", "Fry")
+      .append("category", "homework")
+      .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
+      .append("status", false));
+
+    testId = new ObjectId();
+    Document Fry =
+      new Document()
+        .append("_id", testId)
+        .append("owner", "Fry")
+        .append("category", "homework")
+        .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
+        .append("status", false);
+
+
+    todoDocuments.insertMany(testTodos);
+    todoDocuments.insertOne(Fry);
+
+    todoController = new TodoController(db);
+  }
+
 
   @Test
   public void GetAllTodos() throws IOException {

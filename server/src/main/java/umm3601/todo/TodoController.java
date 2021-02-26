@@ -38,12 +38,28 @@ public class TodoController {
   private final JacksonMongoCollection<Todo> todoCollection;
 
   /**
-   * Construct a controller for users.
+   * Construct a controller for todos.
    *
-   * @param database the database containing user data
+   * @param database the database containing todo data
    */
   public TodoController(MongoDatabase database) {
     todoCollection = JacksonMongoCollection.builder().build(database, "todos", Todo.class);
   }
+
+public void getTodos(Context ctx) {
+  List<Bson> filters = new ArrayList<>(); // start with a blank document
+
+  if (ctx.queryParamMap().containsKey(OWNER_KEY)) {
+      int targetOwner = ctx.queryParam(OWNER_KEY, Integer.class).get();
+      filters.add(eq(OWNER_KEY, targetOwner));
+  }
+  String sortBy = ctx.queryParam("sortby", "owner"); //Sort by sort query param, default is owner
+  String sortOrder = ctx.queryParam("sortorder", "asc");
+
+  ctx.json(todoCollection.find(filters.isEmpty() ? new Document() : and(filters))
+    .sort(sortOrder.equals("desc") ?  Sorts.descending(sortBy) : Sorts.ascending(sortBy))
+    .into(new ArrayList<>()));
+
+}
 
 }

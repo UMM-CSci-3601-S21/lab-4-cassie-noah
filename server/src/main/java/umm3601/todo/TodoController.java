@@ -33,7 +33,7 @@ public class TodoController {
   private static final String CATEGORY_KEY = "category";
   private static final String BODY_KEY = "body";
 
-  static String emailRegex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+  static String statusRegex = "^(false|False|True|true)$";
 
   private final JacksonMongoCollection<Todo> todoCollection;
 
@@ -64,5 +64,31 @@ public void getTodos(Context ctx) {
     .into(new ArrayList<>()));
 
 }
+
+public void addNewTodo(Context ctx) {
+  Todo newTodo = ctx.bodyValidator(Todo.class)
+    .check(todo -> todo.owner != null && todo.owner.length() > 0)
+    .check(todo -> todo.status.toString().matches(statusRegex))
+    .check(todo -> todo.category != null && todo.category.length() > 0)
+    .check(todo -> todo.body != null && todo.body.length() > 0)
+    .get();
+
+
+  todoCollection.insertOne(newTodo);
+  ctx.status(201);
+  ctx.json(ImmutableMap.of("id", newTodo._id));
+}
+
+@SuppressWarnings("lgtm[java/weak-cryptographic-algorithm]")
+  public String md5(String str) throws NoSuchAlgorithmException {
+    MessageDigest md = MessageDigest.getInstance("MD5");
+    byte[] hashInBytes = md.digest(str.toLowerCase().getBytes(StandardCharsets.UTF_8));
+
+    StringBuilder result = new StringBuilder();
+    for (byte b : hashInBytes) {
+      result.append(String.format("%02x", b));
+    }
+    return result.toString();
+  }
 
 }

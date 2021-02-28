@@ -47,13 +47,16 @@ public class TodoController {
   }
 
 public void getTodos(Context ctx) {
+
   List<Bson> filters = new ArrayList<>(); // start with a blank document
 
-  if (ctx.queryParamMap().containsKey(OWNER_KEY)) {
-      int targetOwner = ctx.queryParam(OWNER_KEY, Integer.class).get();
-      filters.add(eq(OWNER_KEY, targetOwner));
+  if (ctx.queryParamMap().containsKey(BODY_KEY)) {
+    filters.add(eq(BODY_KEY, ctx.queryParam(BODY_KEY)));
   }
-  String sortBy = ctx.queryParam("sortby", "owner"); //Sort by sort query param, default is owner
+  if (ctx.queryParamMap().containsKey(CATEGORY_KEY)) {
+    filters.add(regex(CATEGORY_KEY,  Pattern.quote(ctx.queryParam(CATEGORY_KEY)), "i"));
+  }
+  String sortBy = ctx.queryParam("sortby", "body"); //Sort by sort query param, default is body
   String sortOrder = ctx.queryParam("sortorder", "asc");
 
   ctx.json(todoCollection.find(filters.isEmpty() ? new Document() : and(filters))

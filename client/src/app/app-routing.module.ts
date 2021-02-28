@@ -4,7 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { UserListComponent } from './users/user-list.component';
 import { UserProfileComponent } from './users/user-profile.component';
 import { AddUserComponent } from './users/add-user.component';
-import { TodoListComponent } from './todos/todo-list/todo-list.component';
+import { TodoListComponent } from './todos/todo-list.component';
 
 
 const routes: Routes = [

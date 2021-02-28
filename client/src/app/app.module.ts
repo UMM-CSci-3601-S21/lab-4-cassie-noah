@@ -32,7 +32,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { UserCardComponent } from './users/user-card.component';
 import { UserProfileComponent } from './users/user-profile.component';
 import { AddUserComponent } from './users/add-user.component';
-import { TodoListComponent } from './todos/todo-list/todo-list.component';
+import { TodoListComponent } from './todos/todo-list.component';
 
 const MATERIAL_MODULES: any[] = [
   MatListModule,

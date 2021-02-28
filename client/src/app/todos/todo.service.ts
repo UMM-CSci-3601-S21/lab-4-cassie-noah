@@ -42,7 +42,7 @@ export class TodoService {
     if (filters.owner) {
       filters.owner = filters.owner.toLowerCase();
 
-      filteredTodos = filteredTodos.filter(todo => todo.category.toLowerCase().indexOf(filters.owner) !== -1);
+      filteredTodos = filteredTodos.filter(todo => todo.owner.toLowerCase().indexOf(filters.owner) !== -1);
     }
     if (filters.status){
       filters.status = filters.status.toLowerCase();

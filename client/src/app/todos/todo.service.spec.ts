@@ -131,6 +131,16 @@ describe('TodoService', () => {
         expect(todo.status.indexOf(todoStatus)).toBeGreaterThanOrEqual(0);
       });
     });
+    it('filters by body', () => {
+      const todoBody = 'tempor';
+      const filteredTodos = todoService.filterTodos(testTodos, { body: todoBody });
+      //There should be two todos with a false status
+      expect(filteredTodos.length).toBe(2);
+      // Every returned Todo's body should contain 'tempor'
+      filteredTodos.forEach(todo => {
+        expect(todo.body.indexOf(todoBody)).toBeGreaterThanOrEqual(0);
+      });
+    });
   });
 
 

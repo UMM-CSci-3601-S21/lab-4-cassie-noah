@@ -51,7 +51,7 @@ public void getTodos(Context ctx) {
   List<Bson> filters = new ArrayList<>(); // start with a blank document
 
   if (ctx.queryParamMap().containsKey(BODY_KEY)) {
-    filters.add(eq(BODY_KEY, ctx.queryParam(BODY_KEY)));
+    filters.add(regex(BODY_KEY,  Pattern.quote(ctx.queryParam(BODY_KEY)), "i"));
   }
   if (ctx.queryParamMap().containsKey(CATEGORY_KEY)) {
     filters.add(regex(CATEGORY_KEY,  Pattern.quote(ctx.queryParam(CATEGORY_KEY)), "i"));

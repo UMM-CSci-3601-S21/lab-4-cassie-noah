@@ -21,6 +21,7 @@ export class AddTodoComponent implements OnInit {
       {type: 'required', message: 'Owner is required'},
       {type: 'minlength', message: 'Owner must be at least 2 characters long'},
       {type: 'maxlength', message: 'Owner cannot be more than 50 characters long'},
+      {type: 'pattern', message: 'Owner must be letters'}
     ],
 
     category: [
@@ -30,19 +31,49 @@ export class AddTodoComponent implements OnInit {
     ],
 
     status: [
-      {type: 'required', message: 'Status must be true/false'},
+      {type: 'pattern', message: 'Status must be True/False'},
       {type: 'required', message: 'Status is required'}
     ],
 
     body: [
-      { type: 'required', message: 'Body is required' },
+      {type: 'required', message: 'Body is required' },
       {type: 'minlength', message: 'Body must be at least 2 characters long'},
     ]
   };
 
   constructor(private todoService: TodoService, private fb: FormBuilder, private snackBar: MatSnackBar, private router: Router) { }
 
+  createForms() {
+    this.addTodoForm = this.fb.group({
+
+      owner: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+        Validators.pattern('^[A-Za-z]$')
+      ])),
+
+      status: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.min(4),
+        Validators.max(5),
+        Validators.pattern('^(false|False|True|true)$')
+      ])),
+
+      category: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+      ])),
+
+      body: new FormControl(),
+    });
+
+  }
+
+
   ngOnInit(): void {
+    this.createForms();
   }
 
   submitForm() {

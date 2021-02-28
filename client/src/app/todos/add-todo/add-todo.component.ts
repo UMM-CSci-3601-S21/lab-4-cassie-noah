@@ -40,9 +40,22 @@ export class AddTodoComponent implements OnInit {
     ]
   };
 
-  constructor() { }
+  constructor(private todoService: TodoService, private fb: FormBuilder, private snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  submitForm() {
+    this.todoService.addTodo(this.addTodoForm.value).subscribe(newID => {
+      this.snackBar.open('Added Todo ' + this.addTodoForm.value.name, null, {
+        duration: 2000,
+      });
+      this.router.navigate(['/todos/', newID]);
+    }, err => {
+      this.snackBar.open('Failed to add the todo', 'OK', {
+        duration: 5000,
+      });
+    });
   }
 
 }

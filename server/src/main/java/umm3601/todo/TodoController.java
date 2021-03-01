@@ -32,6 +32,7 @@ public class TodoController {
   private static final String OWNER_KEY = "owner";
   private static final String CATEGORY_KEY = "category";
   private static final String BODY_KEY = "body";
+  private static final String STATUS_KEY = "status";
 
   static String statusRegex = "^(false|False|True|true)$";
 
@@ -55,6 +56,10 @@ public void getTodos(Context ctx) {
   }
   if (ctx.queryParamMap().containsKey(CATEGORY_KEY)) {
     filters.add(regex(CATEGORY_KEY,  Pattern.quote(ctx.queryParam(CATEGORY_KEY)), "i"));
+  }
+  if(ctx.queryParamMap().containsKey(STATUS_KEY)){
+    boolean targetStatus = ctx.queryParam(STATUS_KEY, Boolean.class).get();
+    filters.add(eq(STATUS_KEY, targetStatus));
   }
   String sortBy = ctx.queryParam("sortby", "body"); //Sort by sort query param, default is body
   String sortOrder = ctx.queryParam("sortorder", "asc");

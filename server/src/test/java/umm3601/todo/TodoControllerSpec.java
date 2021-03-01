@@ -98,7 +98,7 @@ public class TodoControllerSpec {
       .append("owner", "Fry")
       .append("category", "homework")
       .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
-      .append("status", false));
+      .append("status", true));
 
     testId = new ObjectId();
     Document Fry =
@@ -107,7 +107,7 @@ public class TodoControllerSpec {
         .append("owner", "Fry")
         .append("category", "homework")
         .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
-        .append("status", false);
+        .append("status", true);
 
 
     todoDocuments.insertMany(testTodos);
@@ -130,6 +130,29 @@ public class TodoControllerSpec {
     String result = ctx.resultString();
     assertEquals(db.getCollection("todos").countDocuments(), JavalinJson.fromJson(result, Todo[].class).length);
   }
+
+  @Test
+  public void GetTodosByStatus() throws IOException {
+    mockReq.setQueryString("status=false");
+
+    Context ctx = ContextUtil.init(mockReq, mockRes, "api/todos");
+    todoController.getTodos(ctx);
+
+    assertEquals(200, mockRes.getStatus());
+
+    String result = ctx.resultString();
+    Todo[] resultTodos = JavalinJson.fromJson(result, Todo[].class);
+
+    // There should be two todos with a false status
+    assertEquals(2, resultTodos.length);
+    for(Todo todo : resultTodos){
+      assertEquals(false, todo.status);
+    }
+  }
+
+
+
+
 
 
 

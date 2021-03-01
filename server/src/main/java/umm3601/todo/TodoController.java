@@ -61,6 +61,9 @@ public void getTodos(Context ctx) {
     boolean targetStatus = ctx.queryParam(STATUS_KEY, Boolean.class).get();
     filters.add(eq(STATUS_KEY, targetStatus));
   }
+  if(ctx.queryParamMap().containsKey(OWNER_KEY)){
+    filters.add(regex(OWNER_KEY,  Pattern.quote(ctx.queryParam(OWNER_KEY)), "i"));
+  }
   String sortBy = ctx.queryParam("sortby", "body"); //Sort by sort query param, default is body
   String sortOrder = ctx.queryParam("sortorder", "asc");
 

@@ -84,19 +84,19 @@ public class TodoControllerSpec {
     testTodos.add(
       new Document()
       .append("owner", "Fry")
+      .append("category", "groceries")
+      .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
+      .append("status", false));
+    testTodos.add(
+      new Document()
+      .append("owner", "Mary")
       .append("category", "homework")
       .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
       .append("status", false));
     testTodos.add(
       new Document()
-      .append("owner", "Fry")
-      .append("category", "homework")
-      .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
-      .append("status", false));
-    testTodos.add(
-      new Document()
-      .append("owner", "Fry")
-      .append("category", "homework")
+      .append("owner", "Bob")
+      .append("category", "groceries")
       .append("body", "Nostrud ullamco labore exercitation magna. Excepteur aute aliqua veniam veniam nisi eu occaecat ea magna do.")
       .append("status", true));
 
@@ -148,6 +148,60 @@ public class TodoControllerSpec {
     for(Todo todo : resultTodos){
       assertEquals(false, todo.status);
     }
+  }
+
+  @Test
+  public void GetTodosByOwner(){
+    mockReq.setQueryString("owner=Fry");
+
+    Context ctx = ContextUtil.init(mockReq, mockRes, "api/todos");
+    todoController.getTodos(ctx);
+
+    //assert that request went through
+    assertEquals(200, mockRes.getStatus());
+
+    String result = ctx.resultString();
+    Todo[] resultTodos = JavalinJson.fromJson(result, Todo[].class);
+
+    for(Todo todo : resultTodos){
+      assertEquals("Fry", todo.owner, "The owner should be Fry");
+    }
+  }
+
+  @Test
+  public void GetTodosByBody(){
+    mockReq.setQueryString("body=tempor");
+
+    Context ctx = ContextUtil.init(mockReq, mockRes, "api/todos");
+    todoController.getTodos(ctx);
+
+    assertEquals(200, mockRes.getStatus());
+
+    String result = ctx.resultString();
+    Todo[] resultTodos = JavalinJson.fromJson(result, Todo[].class);
+
+    for(Todo todo : resultTodos){
+      assertTrue(todo.body.contains("tempor"), "The body of the Todo should contain tempor");
+    }
+  }
+
+  @Test
+  public void GetTodosByCategory(){
+    mockReq.setQueryString("category=groceries");
+
+    Context ctx = ContextUtil.init(mockReq, mockRes, "api/todos");
+    todoController.getTodos(ctx);
+
+    assertEquals(200, mockRes.getStatus());
+
+    String result = ctx.resultString();
+    Todo[] resultTodos = JavalinJson.fromJson(result, Todo[].class);
+    assertEquals(2, resultTodos.length);
+    for(Todo todo : resultTodos ){
+      assertEquals("groceries", todo.category, "The category should be groceries");
+    }
+
+
   }
 
 

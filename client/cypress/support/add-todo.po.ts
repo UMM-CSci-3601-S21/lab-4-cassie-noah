@@ -1,3 +1,5 @@
+import { Todo } from 'src/app/todos/todo';
+
 export class AddTodoPage{
   navigateTo(){
     return cy.visit('/todos/new');
@@ -20,6 +22,19 @@ export class AddTodoPage{
 
   }
 
+  getErrorField(formField: string){
+    return cy.get(`mat-error[data-test=${formField}]`);
+  }
 
-
+  addTodo(newTodo: Todo) {
+    this.getFormField('owner').type(newTodo.owner);
+    this.getFormField('status').type(newTodo.status.toString());
+    if (newTodo.category) {
+      this.getFormField('category').type(newTodo.category);
+    }
+    if (newTodo.body) {
+      this.getFormField('body').type(newTodo.body);
+    }
+    return this.addTodoButton().click();
+  }
 }

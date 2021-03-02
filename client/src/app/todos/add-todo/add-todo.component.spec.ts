@@ -13,7 +13,7 @@ import { TodoService } from '../todo.service';
 import { MockTodoService } from 'src/testing/todo.service.mock';
 
 describe('AddTodoComponent', () => {
-  let component: AddTodoComponent;
+  let addTodoComponent: AddTodoComponent;
   let addTodoForm: FormGroup;
   let fixture: ComponentFixture<AddTodoComponent>;
 
@@ -39,18 +39,90 @@ describe('AddTodoComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AddTodoComponent);
-    component = fixture.componentInstance;
-    component.ngOnInit();
+    addTodoComponent = fixture.componentInstance;
+    addTodoComponent.ngOnInit();
     fixture.detectChanges();
-    addTodoForm = component.addTodoForm;
+    addTodoForm = addTodoComponent.addTodoForm;
     expect(addTodoForm).toBeDefined();
     expect(addTodoForm.controls).toBeDefined();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(addTodoComponent).toBeTruthy();
     expect(addTodoForm).toBeTruthy();
   });
 
+  it('should create the component and form', () => {
+    expect(addTodoComponent).toBeTruthy();
+    expect(addTodoForm).toBeTruthy();
+  });
 
+  it('form should be invalid when empty', () => {
+    expect(addTodoForm.valid).toBeFalsy();
+  });
+
+  describe('The name field', () => {
+    let ownerControl: AbstractControl;
+
+    beforeEach(() => {
+      ownerControl = addTodoComponent.addTodoForm.controls.owner;
+    });
+
+    it('should not allow empty owners', () => {
+      ownerControl.setValue('');
+      expect(ownerControl.valid).toBeFalsy();
+    });
+
+    it('should be fine with "Bland Blanche"', () => {
+      ownerControl.setValue('Bland Blanche');
+      expect(ownerControl.valid).toBeTruthy();
+    });
+
+    it('should fail on single character owners', () => {
+      ownerControl.setValue('y');
+      expect(ownerControl.valid).toBeFalsy();
+      expect(ownerControl.hasError('minlength')).toBeTruthy();
+    });
+
+    it('should fail on really long owners', () => {
+      ownerControl.setValue('y'.repeat(100));
+      expect(ownerControl.valid).toBeFalsy();
+      expect(ownerControl.hasError('maxlength')).toBeTruthy();
+    });
+
+    it('shouldn\'t allow digits in the owner', () => {
+      ownerControl.setValue('carlos123');
+      expect(ownerControl.valid).toBeFalsy();
+      expect(ownerControl.hasError('pattern')).toBeTruthy();
+    });
+  });
+
+  describe('The status field', () => {
+    let statusControl: AbstractControl;
+
+    beforeEach(() => {
+      statusControl = addTodoComponent.addTodoForm.controls.status;
+    });
+
+    it('should not allow empty status fields', () => {
+      statusControl.setValue('');
+      expect(statusControl.valid).toBeFalsy();
+    });
+
+    it('should allow allow \'false\'', () => {
+      statusControl.setValue('false');
+      expect(statusControl.valid).toBeTruthy();
+    });
+
+    it('should allow allow \'True\'', () => {
+      statusControl.setValue('True');
+      expect(statusControl.valid).toBeTruthy();
+    });
+
+    it('should not allow allow \'apples\'', () => {
+      statusControl.setValue('apples');
+      expect(statusControl.valid).toBeFalsy();
+      expect(statusControl.hasError('pattern')).toBeTruthy();
+    });
+  });
 });

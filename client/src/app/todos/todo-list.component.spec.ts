@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-
 import { TodoListComponent } from './todo-list.component';
 import { TodoService } from './todo.service';
 import { MockTodoService } from '../../testing/todo.service.mock';
@@ -21,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs';
 import { Todo } from './todo';
+import { MatIconModule } from '@angular/material/icon';
 
 
 const COMMON_IMPORTS: any[] = [
@@ -36,41 +36,83 @@ const COMMON_IMPORTS: any[] = [
   MatListModule,
   MatDividerModule,
   MatRadioModule,
-  MatSnackBarModule,
+  MatIconModule,
   BrowserAnimationsModule,
   RouterTestingModule,
-  HttpClientTestingModule
 ];
 
-
-describe('TodoListComponent', () => {
+describe('Todo List', () => {
   let todoList: TodoListComponent;
   let fixture: ComponentFixture<TodoListComponent>;
 
-  beforeEach(waitForAsync(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ COMMON_IMPORTS ],
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [COMMON_IMPORTS],
       declarations: [TodoListComponent],
-      providers: [{ provide: TodoService, useClass: MockTodoService }],
-    }).compileComponents();
-  }));
+      providers: [{ provide: TodoService, useValue: new MockTodoService() }]
+    });
+  });
 
   beforeEach(waitForAsync(() => {
     TestBed.compileComponents().then(() => {
-    fixture = TestBed.createComponent(TodoListComponent);
-    todoList = fixture.componentInstance;
-    fixture.detectChanges();
-    todoList.getTodosFromServer();
+      fixture = TestBed.createComponent(TodoListComponent);
+      todoList = fixture.componentInstance;
+      fixture.detectChanges();
     });
   }));
 
-
-
-  it('should create', () => {
-    expect(todoList).toBeTruthy();
+  it('contains all the todos', () => {
+    expect(todoList.serverFilteredTodos.length).toBe(3);
   });
 
+  it('contains a todo owned by \'Blanche\'', () => {
+    expect(todoList.serverFilteredTodos.some((todo: Todo) => todo.owner === 'Blanche')).toBe(true);
+  });
 
+  it('contains a todo owned by \'Fry\'', () => {
+    expect(todoList.serverFilteredTodos.some((todo: Todo) => todo.owner === 'Fry')).toBe(true);
+  });
 
+  it('does not contains a todo owned by \'Noah\'', () => {
+    expect(todoList.serverFilteredTodos.some((todo: Todo) => todo.owner === 'Noah')).toBe(false);
+  });
+
+  it('has two incomplete todos', () => {
+    expect(todoList.serverFilteredTodos.filter((todo: Todo) => todo.status === 'false').length).toBe(2);
+  });
 });
 
+describe('Misbehaving Todo List', () => {
+  let todoList: TodoListComponent;
+  let fixture: ComponentFixture<TodoListComponent>;
+
+  let todoServiceStub: {
+    getTodos: () => Observable<Todo[]>;
+    getTodosFiltered: () => Observable<Todo[]>;
+  };
+
+  beforeEach(() => {
+    todoServiceStub = {
+      getTodos: () => new Observable(observer => {
+        observer.error('Error-prone observable');
+      }),
+      getTodosFiltered: () => new Observable(observer => {
+        observer.error('Error-prone observable');
+      })
+    };
+
+    TestBed.configureTestingModule({
+      imports: [COMMON_IMPORTS],
+      declarations: [TodoListComponent],
+      providers: [{ provide: TodoService, useValue: todoServiceStub }]
+    });
+  });
+
+  beforeEach(waitForAsync(() => {
+    TestBed.compileComponents().then(() => {
+      fixture = TestBed.createComponent(TodoListComponent);
+      todoList = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+  }));
+});

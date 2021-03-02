@@ -15,7 +15,7 @@ is potentially helpful and contributed to the shaping of this example -->
             <input matInput placeholder="Owner" formControlName="owner"
                   required>
             <mat-error *ngFor="let validation of addTodoValidationMessages.owner">
-              <mat-error class="error-message" data-test="nameError"
+              <mat-error class="error-message" data-test="ownerError"
                         *ngIf="addTodoForm.get('owner').hasError(validation.type) && (addTodoForm.get('owner').dirty || addTodoForm.get('owner').touched)">
                 {{validation.message}}
               </mat-error>

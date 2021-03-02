@@ -40,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MongoSpec {
 
   private MongoCollection<Document> userDocuments;
+  private MongoCollection<Document> todoDocuments;
 
   static MongoClient mongoClient;
   static MongoDatabase db;
@@ -101,11 +102,22 @@ public class MongoSpec {
     return users.size();
   }
 
+  private int countTodos(FindIterable<Document> documents) {
+    List<Document> todos = intoList(documents);
+    return todos.size();
+  }
+
   @Test
   public void shouldBeThreeUsers() {
     FindIterable<Document> documents = userDocuments.find();
     int numberOfUsers = countUsers(documents);
     assertEquals(3, numberOfUsers, "Should be 3 total users");
+  }
+  @Test
+  public void shouldBeThreeTodos() {
+    FindIterable<Document> documents = userDocuments.find();
+    int numberOfTodos = countTodos(documents);
+    assertEquals(3, numberOfTodos, "Should be 3 total todos");
   }
 
   @Test

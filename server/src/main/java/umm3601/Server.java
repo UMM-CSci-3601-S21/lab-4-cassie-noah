@@ -65,6 +65,7 @@ public class Server {
 
     // Get the specified user
     server.get("/api/users/:id", userController::getUser);
+    server.get("/api/todos/:id", todoController::getTodo);
 
     // Delete the specified user
     server.delete("/api/users/:id", userController::deleteUser);

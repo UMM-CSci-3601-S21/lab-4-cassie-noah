@@ -32,6 +32,7 @@ public class TodoController {
   private static final String OWNER_KEY = "owner";
   private static final String CATEGORY_KEY = "category";
   private static final String BODY_KEY = "body";
+  private static final String STATUS_KEY = "status";
 
   static String statusRegex = "^(false|False|True|true)$";
 
@@ -56,6 +57,13 @@ public void getTodos(Context ctx) {
   if (ctx.queryParamMap().containsKey(CATEGORY_KEY)) {
     filters.add(regex(CATEGORY_KEY,  Pattern.quote(ctx.queryParam(CATEGORY_KEY)), "i"));
   }
+  if(ctx.queryParamMap().containsKey(STATUS_KEY)){
+    boolean targetStatus = ctx.queryParam(STATUS_KEY, Boolean.class).get();
+    filters.add(eq(STATUS_KEY, targetStatus));
+  }
+  if(ctx.queryParamMap().containsKey(OWNER_KEY)){
+    filters.add(regex(OWNER_KEY,  Pattern.quote(ctx.queryParam(OWNER_KEY)), "i"));
+  }
   String sortBy = ctx.queryParam("sortby", "body"); //Sort by sort query param, default is body
   String sortOrder = ctx.queryParam("sortorder", "asc");
 
@@ -65,12 +73,30 @@ public void getTodos(Context ctx) {
 
 }
 
+public void getTodo(Context ctx){
+  String id = ctx.pathParam("id");
+  Todo todo;
+
+  try{
+    todo = todoCollection.find(eq("_id", new ObjectId(id))).first();
+  } catch(IllegalArgumentException e){
+    throw new BadRequestResponse("The id is not valid");
+  }
+  if(todo == null){
+    throw new NotFoundResponse("The todo could not be found");
+  }
+  else{
+    ctx.json(todo);
+  }
+
+}
+
 public void addNewTodo(Context ctx) {
   Todo newTodo = ctx.bodyValidator(Todo.class)
     .check(todo -> todo.owner != null && todo.owner.length() > 0)
     .check(todo -> todo.status.toString().matches(statusRegex))
-    .check(todo -> todo.category != null && todo.category.length() > 0)
     .check(todo -> todo.body != null && todo.body.length() > 0)
+    .check(todo -> todo.category != null && todo.category.length() > 0)
     .get();
 
 

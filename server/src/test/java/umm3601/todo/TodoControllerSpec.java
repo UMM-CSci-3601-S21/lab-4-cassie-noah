@@ -217,6 +217,16 @@ public class TodoControllerSpec {
   assertEquals(resultTodo.owner, "Fry");
  }
 
+ @Test
+ public void GetTodoWithBadId(){
+  Context ctx = ContextUtil.init(mockReq, mockRes, "api/todos/:id", ImmutableMap.of("id", "58af3a600343927e48e87335"));
+
+    assertThrows(NotFoundResponse.class, () -> {
+      todoController.getTodo(ctx);
+    });
+
+ }
+
 
 
 

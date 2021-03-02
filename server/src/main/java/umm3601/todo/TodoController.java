@@ -73,6 +73,24 @@ public void getTodos(Context ctx) {
 
 }
 
+public void getTodo(Context ctx){
+  String id = ctx.pathParam("id");
+  Todo todo;
+
+  try{
+    todo = todoCollection.find(eq("_id", new ObjectId(id))).first();
+  } catch(IllegalArgumentException e){
+    throw new BadRequestResponse("The id is not valid");
+  }
+  if(todo == null){
+    throw new NotFoundResponse("The todo could not be found");
+  }
+  else{
+    ctx.json(todo);
+  }
+
+}
+
 public void addNewTodo(Context ctx) {
   Todo newTodo = ctx.bodyValidator(Todo.class)
     .check(todo -> todo.owner != null && todo.owner.length() > 0)

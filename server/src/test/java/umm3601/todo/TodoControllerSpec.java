@@ -200,9 +200,22 @@ public class TodoControllerSpec {
     for(Todo todo : resultTodos ){
       assertEquals("groceries", todo.category, "The category should be groceries");
     }
-
-
   }
+ @Test
+ public void GetTodoById(){
+  String testID = testId.toHexString();
+
+  Context ctx = ContextUtil.init(mockReq, mockRes, "api/todos/:id", ImmutableMap.of("id", testID));
+  todoController.getTodo(ctx);
+
+  assertEquals(200, mockRes.getStatus());
+
+  String result = ctx.resultString();
+  Todo resultTodo = JavalinJson.fromJson(result, Todo.class);
+
+  assertEquals(testId.toHexString(), resultTodo._id.toString());
+  assertEquals(resultTodo.owner, "Fry");
+ }
 
 
 

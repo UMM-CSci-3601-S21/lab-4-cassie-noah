@@ -1,9 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Todo } from './todo';
 import { TodoService } from './todo.service';
-import { HttpClientModule } from '@angular/common/http';
-import { ArrayDataSource } from '@angular/cdk/collections';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({

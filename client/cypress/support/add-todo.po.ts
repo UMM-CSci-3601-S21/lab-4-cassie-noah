@@ -3,6 +3,13 @@ export class AddTodoPage{
     return cy.visit('/todos/new');
   }
 
+  getTitle(){
+    return cy.get('.add-todo-title');
+  }
+  addTodoButton(){
+    return cy.get('[data-test=confirmAddTodoButton]');
+  }
+
 
 
 }

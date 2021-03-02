@@ -47,11 +47,6 @@ describe('AddTodoComponent', () => {
     expect(addTodoForm.controls).toBeDefined();
   });
 
-  it('should create', () => {
-    expect(addTodoComponent).toBeTruthy();
-    expect(addTodoForm).toBeTruthy();
-  });
-
   it('should create the component and form', () => {
     expect(addTodoComponent).toBeTruthy();
     expect(addTodoForm).toBeTruthy();
@@ -61,7 +56,7 @@ describe('AddTodoComponent', () => {
     expect(addTodoForm.valid).toBeFalsy();
   });
 
-  describe('The name field', () => {
+  describe('The owner field', () => {
     let ownerControl: AbstractControl;
 
     beforeEach(() => {
@@ -71,6 +66,7 @@ describe('AddTodoComponent', () => {
     it('should not allow empty owners', () => {
       ownerControl.setValue('');
       expect(ownerControl.valid).toBeFalsy();
+      expect(ownerControl.hasError('required')).toBeTruthy();
     });
 
     it('should be fine with "Bland Blanche"', () => {
@@ -107,6 +103,7 @@ describe('AddTodoComponent', () => {
     it('should not allow empty status fields', () => {
       statusControl.setValue('');
       expect(statusControl.valid).toBeFalsy();
+      expect(statusControl.hasError('required')).toBeTruthy();
     });
 
     it('should allow allow \'false\'', () => {
@@ -136,6 +133,7 @@ describe('AddTodoComponent', () => {
     it('should not allow empty categories', () => {
       catControl.setValue('');
       expect(catControl.valid).toBeFalsy();
+      expect(catControl.hasError('required')).toBeTruthy();
     });
 
     it('should be fine with "Cooking"', () => {

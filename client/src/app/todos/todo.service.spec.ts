@@ -202,16 +202,6 @@ describe('TodoService', () => {
       expect(req.request.method).toEqual('GET');
 
       req.flush(targetTodo);
-
     });
-
-
   });
-
-
 });
-
-
-
-
-

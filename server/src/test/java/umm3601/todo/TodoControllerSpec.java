@@ -236,18 +236,18 @@ public class TodoControllerSpec {
   public void AddTodo() throws IOException {
 
     String testNewTodo = "{"
-      + "\"owner\": \"Fry\","
-      + "\"status\":  false,"
-      + "\"body\": \"testers\","
-      + "\"category\": \"video games\","
+      + "\"owner\": \"Rocky\","
+      + "\"status\": true,"
+      + "\"category\": \"groceries\","
+      + "\"body\": \"I am rocky\""
       + "}";
 
     mockReq.setBodyContent(testNewTodo);
     mockReq.setMethod("POST");
 
     Context ctx = ContextUtil.init(mockReq, mockRes, "api/todos");
-    todoController.addNewTodo(ctx);
 
+    todoController.addNewTodo(ctx);
     assertEquals(201, mockRes.getStatus());
 
     String result = ctx.resultString();
@@ -257,13 +257,12 @@ public class TodoControllerSpec {
 
     assertEquals(1, db.getCollection("todos").countDocuments(eq("_id", new ObjectId(id))));
 
-    //verify user was added to the database and the correct ID
     Document addedTodo = db.getCollection("todos").find(eq("_id", new ObjectId(id))).first();
     assertNotNull(addedTodo);
-    assertEquals("Test User", addedTodo.getString("name"));
-    assertEquals("False", addedTodo.getString("status"));
-    assertEquals("video games", addedTodo.getString("category"));
-    assertEquals("testers", addedTodo.getString("body"));
+    assertEquals("Rocky", addedTodo.getString("owner"));
+    assertEquals(true, addedTodo.getBoolean("status"));
+    assertEquals("groceries", addedTodo.getString("category"));
+    assertEquals("I am rocky", addedTodo.getString("body"));
   }
 
 

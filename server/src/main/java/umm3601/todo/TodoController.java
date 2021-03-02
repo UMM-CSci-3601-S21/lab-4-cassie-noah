@@ -94,7 +94,7 @@ public void getTodo(Context ctx){
 public void addNewTodo(Context ctx) {
   Todo newTodo = ctx.bodyValidator(Todo.class)
     .check(todo -> todo.owner != null && todo.owner.length() > 0)
-    .check(todo -> todo.status == false || todo.status == true)
+    .check(todo -> todo.status.toString().matches(statusRegex))
     .check(todo -> todo.body != null && todo.body.length() > 0)
     .check(todo -> todo.category != null && todo.category.length() > 0)
     .get();

@@ -50,7 +50,7 @@ export class AddTodoComponent implements OnInit {
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(50),
-        Validators.pattern('^[A-Za-z]+$')
+        Validators.pattern('^[A-Za-z ]+$')
       ])),
 
       status: new FormControl('', Validators.compose([
@@ -66,7 +66,10 @@ export class AddTodoComponent implements OnInit {
         Validators.maxLength(50),
       ])),
 
-      body: new FormControl(),
+      body: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.minLength(2)
+      ])),
     });
 
   }

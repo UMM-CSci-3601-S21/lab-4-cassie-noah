@@ -125,4 +125,64 @@ describe('AddTodoComponent', () => {
       expect(statusControl.hasError('pattern')).toBeTruthy();
     });
   });
+
+  describe('The category field', () => {
+    let catControl: AbstractControl;
+
+    beforeEach(() => {
+      catControl = addTodoComponent.addTodoForm.controls.category;
+    });
+
+    it('should not allow empty categories', () => {
+      catControl.setValue('');
+      expect(catControl.valid).toBeFalsy();
+    });
+
+    it('should be fine with "Cooking"', () => {
+      catControl.setValue('Cooking');
+      expect(catControl.valid).toBeTruthy();
+    });
+
+    it('should fail on single character categories', () => {
+      catControl.setValue('y');
+      expect(catControl.valid).toBeFalsy();
+      expect(catControl.hasError('minlength')).toBeTruthy();
+    });
+
+    it('should fail on really long categories', () => {
+      catControl.setValue('y'.repeat(100));
+      expect(catControl.valid).toBeFalsy();
+      expect(catControl.hasError('maxlength')).toBeTruthy();
+    });
+  });
+
+  describe('The body field', () => {
+    let bodyControl: AbstractControl;
+
+    beforeEach(() => {
+      bodyControl = addTodoComponent.addTodoForm.controls.body;
+    });
+
+    it('should not allow an empty body', () => {
+      bodyControl.setValue('');
+      expect(bodyControl.valid).toBeFalsy();
+      expect(bodyControl.hasError('required')).toBeTruthy();
+    });
+
+    it('should allow the body "Baking an apple pie with mom"', () => {
+      bodyControl.setValue('Baking an apple pie with mom');
+      expect(bodyControl.valid).toBeTruthy();
+    });
+
+    it('should fail on single character bodies', () => {
+      bodyControl.setValue('t');
+      expect(bodyControl.valid).toBeFalsy();
+      expect(bodyControl.hasError('minlength')).toBeTruthy();
+    });
+
+    it('should allow really long bodies', () => {
+      bodyControl.setValue('t'.repeat(500));
+      expect(bodyControl.valid).toBeTruthy();
+    });
+  });
 });

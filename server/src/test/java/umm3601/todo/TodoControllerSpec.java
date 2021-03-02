@@ -233,6 +233,17 @@ public class TodoControllerSpec {
   }
 
   @Test
+  public void GetTodoWithInvalidId() {
+    Context ctx = ContextUtil.init(mockReq, mockRes, "api/todos/:id",
+        ImmutableMap.of("id", "abc"));
+
+    assertThrows(BadRequestResponse.class, () -> {
+      todoController.getTodo(ctx);
+    });
+
+  }
+
+  @Test
   public void AddTodo() throws IOException {
 
     String testNewTodo = "{"

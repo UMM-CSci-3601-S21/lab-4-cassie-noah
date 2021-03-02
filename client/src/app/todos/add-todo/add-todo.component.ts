@@ -66,7 +66,10 @@ export class AddTodoComponent implements OnInit {
         Validators.maxLength(50),
       ])),
 
-      body: new FormControl(),
+      body: new FormControl('', Validators.compose([
+        Validators.required,
+        Validators.minLength(2)
+      ])),
     });
 
   }
